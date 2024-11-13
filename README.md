@@ -1,10 +1,6 @@
 ## Predicting Dog Adoptability
 
-This is a class project for University of North Carolina - Chapel Hill  BIOS611, Fall 2024 taught by Vincent Toups. 
-
-For information on the course, please view Vincent's github:https://github.com/Vincent-Toups/6112024
-
-Now, let's get to the good stuff, the project!
+This project utilizes data from PetFinder.com, that was downloaded from kaggle. The goal is to predict the time it takes for dogs to get adopted based on the information pulled from PetFinder.com which containes characteristics like age, breed, color, vacination status etc. 
 
 To build the docker container, please run
 ```
