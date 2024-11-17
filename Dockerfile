@@ -4,7 +4,7 @@ FROM rocker/verse
 RUN apt update && apt install -y man && rm -rf /var/lib/apt/lists/*
 
 # install the necessary packages for the analysis
-RUN R -e "install.packages(c('here','NatParksPalettes'))"
+RUN R -e "install.packages(c('here','NatParksPalettes','cowplot','ggridges'))"
 
 # Create the directory for RStudio preferences
 RUN mkdir -p /home/rstudio/.config/rstudio
