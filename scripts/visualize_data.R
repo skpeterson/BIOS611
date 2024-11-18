@@ -7,7 +7,7 @@ library(cowplot)
 data_all <- read.csv('work/data/working_data/train_adoption_values_to_category_data.csv', sep = ',')
 
 palette <- natparks.pals("Saguaro",n = 2)
-adoption_dist <- ggplot(data_all, aes(x=AdoptionSpeed, y=Type.x, fill=Type.x)) + 
+adoption_dist <- ggplot(data_all, aes(x=AdoptionSpeed, y=Type, fill=Type)) + 
   geom_density_ridges() +
   scale_fill_manual(values=palette) +
   labs(x = "Adoption Speed", y = "", fill = "Type") +
@@ -15,7 +15,7 @@ adoption_dist <- ggplot(data_all, aes(x=AdoptionSpeed, y=Type.x, fill=Type.x)) +
 
 
 palette <- natparks.pals("Saguaro",n = 2)
-pets_per_post <- ggplot(data_all, aes(x = Quantity, fill = Type.x)) +
+pets_per_post <- ggplot(data_all, aes(x = Quantity, fill = Type)) +
   geom_histogram(binwidth = 1, color = "black", alpha = 0.7) +  
   scale_fill_manual(values = palette) +
   labs(title = "Number of Animals in Post",               
@@ -39,7 +39,7 @@ data_multi <- data_all %>% filter(Quantity > '1')
 
 palette <- natparks.pals("Arches",n = 4)
 
-size_singles <- ggplot(data_singles %>% group_by(Type.x, MaturitySize) %>% count(), aes(x=Type.x, y = n, fill = MaturitySize)) + 
+size_singles <- ggplot(data_singles %>% group_by(Type, MaturitySize) %>% count(), aes(x=Type, y = n, fill = MaturitySize)) + 
   geom_col(position = "stack") +
   labs(x = "Type", y = "Count", fill = "Size") +
   theme_classic() +
@@ -50,7 +50,7 @@ make_stacked_bar_plot <- function(tallied_data, feature_name) {
   n_colors <- length(unique(tallied_data[[feature_name]]))
   palette <- natparks.pals("Arches", n = n_colors)
   
-  ggplot(tallied_data, aes(x=Type.x, y = n, fill = tallied_data[[feature_name]])) +
+  ggplot(tallied_data, aes(x=Type, y = n, fill = tallied_data[[feature_name]])) +
     geom_col(position = "stack") +
     labs(x = "", y = "Number of Animals", fill = feature_name) +
     theme_classic() +
@@ -62,7 +62,7 @@ feature_columns <- c("Gender","MaturitySize", "FurLength", "Vaccinated",
                      "Dewormed", "Sterilized", "Health")
 
 plots <- lapply(feature_columns, function(feature) {
-  make_stacked_bar_plot(data_singles %>% group_by(Type.x, .data[[feature]]) %>% count(), 
+  make_stacked_bar_plot(data_singles %>% group_by(Type, .data[[feature]]) %>% count(), 
                         feature_name = feature)
 })
 
@@ -74,20 +74,20 @@ ggsave("work/results/figures/single_animals_overview_plots.png", basic_overview_
 
 # age distribution 
 ggplot(data_singles) + 
-  geom_violin(aes(x = Type.x, y = Age / 12, fill = Type.x)) +
+  geom_violin(aes(x = Type, y = Age / 12, fill = Type)) +
   scale_fill_manual(values = c("#345023", "#596C0B")) + 
   labs(x = "", y = "Age in Years") +
   theme_classic()
 
 ## types of breeds 
 
-data_singles %>% group_by(Type.x, BreedName_primary) %>% count() %>% arrange(desc(n))
+data_singles %>% group_by(Type, BreedName_primary) %>% count() %>% arrange(desc(n))
 
 
 # explore some other features of our data, like the names of the animals 
-dog_name <- data_singles %>% filter(Type.x == 'Dog') %>%  group_by(Name) %>% count() %>% arrange(desc(n))
+dog_name <- data_singles %>% filter(Type == 'Dog') %>%  group_by(Name) %>% count() %>% arrange(desc(n))
 
-cat_name <- data_singles %>% filter(Type.x == 'Cat') %>%  group_by(Name) %>% count() %>% arrange(desc(n))
+cat_name <- data_singles %>% filter(Type == 'Cat') %>%  group_by(Name) %>% count() %>% arrange(desc(n))
 
 # removed the very first line bc it was 'unknown'
 dog_names_plt <- ggplot(dog_name[2:30,]) + 

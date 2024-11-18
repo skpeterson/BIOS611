@@ -1,5 +1,7 @@
-library(here)
-library(dplyr)
+suppressPackageStartupMessages({
+  library(here)
+  library(dplyr)
+})
 
 data <- read.csv('work/data/source_data/petfinder_train_dataset.csv',sep=',')
 breed_labels <- read.csv('work/data/source_data/breed_labels.csv')
@@ -26,6 +28,7 @@ data <- data %>%
   left_join(breed_labels, by = c("Breed2" = "BreedID")) %>%
   rename(BreedName_secondary = BreedName) %>% 
   select(-c(Type.y, Type))
+colnames(data)[colnames(data) == "Type.x"] <- "Type"
 
 # turn colors from numbers to names 
 
@@ -48,5 +51,24 @@ colnames(data)[colnames(data) == "ColorName"] <- "Color3_Name"
 # Replace empty or missing values in the Name column with "Unknown"
 data$Name[is.na(data$Name) | data$Name == ""] <- "Unknown"
 
+# let's keep only the columns we want for visualization purposes 
+
+data_viz <- data %>% select(-c('Color1', 'Color2','Color3',
+                               'Breed1','Breed2','RescuerID',
+                               'VideoAmt','Description','PhotoAmt'))
+
+# quickly check the name category to see if we need to clean 
+data_viz %>% group_by(Type,Name) %>% count() %>% arrange(desc(n)) %>% print(n=30)
+
+# check least common names out of curiosity, they all appear to be descriptions more than names, but we won't fix these 
+data_viz %>% group_by(Type,Name) %>% count() %>% arrange(desc(-n)) %>% print(n=50)
+
+# Name contains Unknown as well as No Name and Kittens, make these unknown for consistency
+data_viz$Name[data_viz$Name %in% c('No Name', 'Kittens','Puppy')] <- 'Unknown'
+
+
+# some animals are more than 1, but mostly its 1 cat or dog in each listing
+data_viz %>% group_by(Type, Quantity) %>% count() %>% print(n=30)
+
 # let's write this data out so we can use it for visualization 
-write.csv(data, file = 'work/data/working_data/train_adoption_values_to_category_data.csv', row.names = F)
+write.csv(data_viz, file = 'work/data/working_data/train_adoption_values_to_category_data.csv', row.names = F)
