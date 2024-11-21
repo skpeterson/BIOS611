@@ -1,0 +1,72 @@
+---
+title: "Predicting Pet Adoption Rates"
+author: "Sara K Peterson"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## What factors influence whether or not a cat or dog is adopted from a shelter? 
+
+Our data set, downloaded from kaggle, and scraped from the PetFinder website, provides us with insight into dogs/cats that were put up for adoption in the Country of Malaysia.
+
+We have two goals on this project:
+
+1. Explore and visualize the data set through various summary figures using R (specifically the tidyverse package, mainly ggplot2 and dplyr)
+
+2. Implement a model that allows us to accurately predict the adoption rate for a given animal in Python (specifically using the libraries ski-kit-learn and caret)
+
+## Goal 1: Explore and visualize our dataset
+
+Given that our goal is to predict adaptability, let's look at the distribution of adoption rates within our data set, as well as the frequency of the number of pets that are in a given post. If more than one animal is in a given post, it makes it trickier to attribute features to the animal, unless we assume uniform across the set. 
+
+From the figure we can notice two important qualities of our data set from the start. First we see that we have a balance data set in terms of the adoption rate. Specifically, we note that very few animals are adopted the day the listing goes up (0). It looks like a cats are more commonly adopted between 1 - 7 days (1) and between 8 - 30 days (2) within the post being available, while dogs are more often adopted 31 - 90 days (3) and 91 + days (4) after post. A slightly smaller number of animals are  Second, we see that a vast majority if our listings are single animals. Both of these are great news! The first, because it means that we should be able to predict the adoption rate, since we have example cases for each of the values we want to predict. The second is helpful for visualization purposes, as we are able to know that the feature in the data is describing that animal specifically. 
+
+![*Figure 1. (Left) Distribution of adoption speeds of animals in the dataset separated by Cats vs Dogs where 0 = Adopted same day as posting, 1 = Adopted 1-7 days since posting, 2 = Adopted 8-30 days since posting, 3 = Adopted 31 - 90 days since posting, 4 = Adopted 91 + days since posting. (Right) The quantity of animals included in the posting.*]( /home/rstudio/work/results/figures/cat_dog_adopt_rate_quantity_per_post.png){ width=500px }
+
+
+
+Now that we can see we have some posts with greater than 1 animal per post, let's separate out data into **two categories**, *posts with 1 animal*, and *posts with more than 1 animal*. We will create our visualizations with the listings that are for 1 animal only, as then we have a 1:1 mapping of features to animal. Otherwise, we are assuming that the features are true for all animals, which may or not be accurate. 
+
+To view a summary of our data, we will look at bar charts of our all of our features except for breed, adoption fee, and state, as these have too many categories and will be more helpful to view in a different way. 
+
+From the visualization below, we can observe the following:
+
+- The gender of the animal
+- The size at maturity of the animal
+- The hair length
+- Vaccination status
+- Dewormed status
+- Whether the animal has been spayed/neutered
+- The health status of the animal at the time of adoption
+- The main fur color.
+
+
+![*Figure 2. Overview of various features of the data set including, the gender of the animal, the size at maturity of the animal, the hair length, vaccination status, dewormed status, whether the animal has been spayed/neutered, the health status of the animal as it was put up for adoption, and the main fur color.*](/home/rstudio/work/results/figures/single_animals_overview_plots.png){ width=400px }
+
+
+
+There are a range of costs for the animals, going from **free to a max of 2000 dollars**. The distribution of the cats and dogs are similar, with a vast majority of animals being free to 10 dollars. We see a second bump in cost around 50 dollars, and then around 100 dollars. 
+
+![*Figure 3. Overview of various features of the data set including, the gender of the animal, the size at maturity of the animal, the hair length, vaccination status, dewormed status, whether the animal has been spayed/neutered, the health status of the animal as it was put up for adoption, and the main fur color.* ](/home/rstudio/work/results/figures/adoption_fee_distribution.png){ width=300px }
+
+
+Next, let's look at the breeds of dogs and cats in our data set. In total, we have **63 distinct cat breeds**, and **109 distinct dog breeds**. For cats, aside from the generic domestic/american short, medium, and long hair, we see that the most common cat breed is a **Tabby**, followed by Siamese, and Persian, all within a similar range of occurrence. We see then see a decrease in the number of cats per breed for the breeds Calico, Bengal, and Tuxedo. For dog breeds, we see that the primary breed by far is **mixed breed**, with Shih Tzu, Labrador retrievers, poodles and terriers being the most common breeds. In the box plot on the right hand side of the figure we can see that the **median number of animals per breed is higher in cats than dogs**, with the median for cats being ~6 and for dogs ~4. Given that we have fewer cat breeds than dog breeds, and that we have more dogs than cats overall in our data set, this makes sense.  
+
+![*Figure 4. (Left) Cat breeds in ranked order of most common to less common for breeds with at least 5 cats in the data. (Middle) Dog breeds in ranked order of most common to less common for breeds with at least 5 dogs in the data. (Right) Distribution of number of animals per breed.* ](/home/rstudio/work/results/figures/top_dog_cat_breed_names_num_animals_per_breed_combined.png){width=800px}
+
+
+
+Though the names of the pets will not become a factor in our model, it is still interesting to explore. The **most common name for both cats and dogs was 'Unknown' or 'No Name Yet'**, but since these results are less interesting to show, we are showing only those with pets that have a given name. For dogs, we see the top names are Lucky, Brownie and Max. For cats, we see the top names are Kitty, Baby, Mimi. Also important to view are the range of ages of the pets listed. For both cats and dogs we see that the range of ages listed for the animals goes from very young (sub 1 year) to quite old, with a **maximum age around 21 years**. We can definitely see that the age is skewed lower, with **most animals in the data set being under 1 year old.** 
+
+![*Figure 5. (Left) Most common dog and cat names for animals with a name. 'Unknown' was the most common, but this was removed such that we show animals assigned names. (Right) The age distribution of the anmials in years.*](/home/rstudio/work/results/figures/single_animals_top_cat_dog_names_ages.png){width=700px}
+
+
+Great! We have explore our data set and shown that is well balanced and has many interesting features. This will work great for us to move into building a model to predict the adoption rate. 
+
+
+## Goal 2 : Predict the speed the animal will get adopted 

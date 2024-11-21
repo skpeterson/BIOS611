@@ -11,7 +11,7 @@ color_labels <- rbind(color_labels, no_color)
 state_labels <- read.csv('work/data/source_data/state_labels.csv')
 
 
-# Convert columns to appropriate data types
+# Convert columns to appropriate data types and give factors meaning 
 data$Type <- factor(data$Type, labels = c("Dog", "Cat"))
 data$Gender <- factor(data$Gender, labels = c("Male", "Female", "Mixed"))
 data$MaturitySize <- factor(data$MaturitySize, levels = c(0, 1, 2, 3, 4), labels = c("Not Specified", "Small", "Medium", "Large", "Extra Large"))
@@ -35,17 +35,20 @@ colnames(data)[colnames(data) == "Type.x"] <- "Type"
 # Map Color1 to ColorName
 data <- merge(data, color_labels, by.x = "Color1", by.y = "ColorID", all.x = TRUE)
 # Rename the new column for clarity
-colnames(data)[colnames(data) == "ColorName"] <- "Color1_Name"
+colnames(data)[colnames(data) == "ColorName"] <- "Primary_Color"
 
 # Map Color2 to ColorName
 data <- merge(data, color_labels, by.x = "Color2", by.y = "ColorID", all.x = TRUE)
 # Rename the new column for clarity
-colnames(data)[colnames(data) == "ColorName"] <- "Color2_Name"
+colnames(data)[colnames(data) == "ColorName"] <- "Second_color"
 
 # Map Color3 to ColorName
 data <- merge(data, color_labels, by.x = "Color3", by.y = "ColorID", all.x = TRUE)
 # Rename the new column for clarity
-colnames(data)[colnames(data) == "ColorName"] <- "Color3_Name"
+colnames(data)[colnames(data) == "ColorName"] <- "Third_Color"
+
+# map state ID to actual state label
+data <- merge(data, state_labels, by.x = 'State', by.y = 'StateID', all.x = TRUE)
 
 # let's handle dogs not having a name 
 # Replace empty or missing values in the Name column with "Unknown"

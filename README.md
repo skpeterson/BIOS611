@@ -17,6 +17,8 @@ To run the Docker container and get started, please run
 bash start_docker.sh
 ```
 
-Now open your web browser and navigate to localhost:8787. For username: rstudio, password: benson.
+Now open your web browser, and open two tabs. The docker container runs both Rstudio and Python/Jupyter.
+- To access Rstudio, navigate to localhost:8787. username: rstudio, password: benson
+- To access Jupyter notebook go to http://<host_machine_ip>:8888/tree?token=<token> . Where <host machine IP> is the IP address of the machine running the Docker container, and the <token> can be found in the container log in the bash shell you started the container in.
 
 Great!! You're in!!
