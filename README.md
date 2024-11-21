@@ -1,13 +1,21 @@
 ## Predicting Dog Adoptability
 
-This project utilizes data from PetFinder.com, that was downloaded from kaggle. The goal is to predict the time it takes for dogs to get adopted based on the information pulled from PetFinder.com which containes characteristics like age, breed, color, vacination status etc. 
+This project utilizes data from PetFinder.com, that was downloaded from kaggle. The goal is to predict the time it takes for dogs to get adopted based on the information pulled from PetFinder.com which contains characteristics like age, breed, color, vacination status etc. 
+
+To skip all the hard work and see the results of the analysis, view the rendered html report in 
+```
+results/report/Summary_Report.html
+```
+
+Or, do run the analysis yourself and poke around the container, do the following. 
+
 
 To get started, clone this repository using the following command line argument
 ```
 git clone https://github.com/skpeterson/BIOS611_Pet_Adoption_Data_Project.git
 ```
 
-To build the docker container, open your terminal and run
+To build the docker container, open your terminal, start a bash session, and run
 ```
 bash build_docker.sh
 ```
