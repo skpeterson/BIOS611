@@ -26,7 +26,7 @@ Given that our goal is to predict adaptability, let's look at the distribution o
 
 From the figure we can notice two important qualities of our data set from the start. First we see that we have a balance data set in terms of the adoption rate. Specifically, we note that very few animals are adopted the day the listing goes up (0). It looks like a cats are more commonly adopted between 1 - 7 days (1) and between 8 - 30 days (2) within the post being available, while dogs are more often adopted 31 - 90 days (3) and 91 + days (4) after post. A slightly smaller number of animals are  Second, we see that a vast majority if our listings are single animals. Both of these are great news! The first, because it means that we should be able to predict the adoption rate, since we have example cases for each of the values we want to predict. The second is helpful for visualization purposes, as we are able to know that the feature in the data is describing that animal specifically. 
 
-![*Figure 1. (Left) Distribution of adoption speeds of animals in the dataset separated by Cats vs Dogs where 0 = Adopted same day as posting, 1 = Adopted 1-7 days since posting, 2 = Adopted 8-30 days since posting, 3 = Adopted 31 - 90 days since posting, 4 = Adopted 91 + days since posting. (Right) The quantity of animals included in the posting.*]( /home/rstudio/work/results/figures/cat_dog_adopt_rate_quantity_per_post.png){ width=500px }
+![*Figure 1. (Left) Distribution of adoption speeds of animals in the dataset separated by Cats vs Dogs where 0 = Adopted same day as posting, 1 = Adopted 1-7 days since posting, 2 = Adopted 8-30 days since posting, 3 = Adopted 31 - 90 days since posting, 4 = Adopted 91 + days since posting. (Right) The quantity of animals included in the posting.*]( /home/rstudio/work/results/figures/summary_vis/cat_dog_adopt_rate_quantity_per_post.png){ width=500px }
 
 
 
@@ -46,24 +46,24 @@ From the visualization below, we can observe the following:
 - The main fur color.
 
 
-![*Figure 2. Overview of various features of the data set including, the gender of the animal, the size at maturity of the animal, the hair length, vaccination status, dewormed status, whether the animal has been spayed/neutered, the health status of the animal as it was put up for adoption, and the main fur color.*](/home/rstudio/work/results/figures/single_animals_overview_plots.png){ width=400px }
+![*Figure 2. Overview of various features of the data set including, the gender of the animal, the size at maturity of the animal, the hair length, vaccination status, dewormed status, whether the animal has been spayed/neutered, the health status of the animal as it was put up for adoption, and the main fur color.*](/home/rstudio/work/results/figures/summary_vis/single_animals_overview_plots.png){ width=400px }
 
 
 
 There are a range of costs for the animals, going from **free to a max of 2000 dollars**. The distribution of the cats and dogs are similar, with a vast majority of animals being free to 10 dollars. We see a second bump in cost around 50 dollars, and then around 100 dollars. 
 
-![*Figure 3. Overview of various features of the data set including, the gender of the animal, the size at maturity of the animal, the hair length, vaccination status, dewormed status, whether the animal has been spayed/neutered, the health status of the animal as it was put up for adoption, and the main fur color.* ](/home/rstudio/work/results/figures/adoption_fee_distribution.png){ width=300px }
+![*Figure 3. Overview of various features of the data set including, the gender of the animal, the size at maturity of the animal, the hair length, vaccination status, dewormed status, whether the animal has been spayed/neutered, the health status of the animal as it was put up for adoption, and the main fur color.* ](/home/rstudio/work/results/figures/summary_vis/adoption_fee_distribution.png){ width=300px }
 
 
 Next, let's look at the breeds of dogs and cats in our data set. In total, we have **63 distinct cat breeds**, and **109 distinct dog breeds**. For cats, aside from the generic domestic/american short, medium, and long hair, we see that the most common cat breed is a **Tabby**, followed by Siamese, and Persian, all within a similar range of occurrence. We see then see a decrease in the number of cats per breed for the breeds Calico, Bengal, and Tuxedo. For dog breeds, we see that the primary breed by far is **mixed breed**, with Shih Tzu, Labrador retrievers, poodles and terriers being the most common breeds. In the box plot on the right hand side of the figure we can see that the **median number of animals per breed is higher in cats than dogs**, with the median for cats being ~6 and for dogs ~4. Given that we have fewer cat breeds than dog breeds, and that we have more dogs than cats overall in our data set, this makes sense.  
 
-![*Figure 4. (Left) Cat breeds in ranked order of most common to less common for breeds with at least 5 cats in the data. (Middle) Dog breeds in ranked order of most common to less common for breeds with at least 5 dogs in the data. (Right) Distribution of number of animals per breed.* ](/home/rstudio/work/results/figures/top_dog_cat_breed_names_num_animals_per_breed_combined.png){width=800px}
+![*Figure 4. (Left) Cat breeds in ranked order of most common to less common for breeds with at least 5 cats in the data. (Middle) Dog breeds in ranked order of most common to less common for breeds with at least 5 dogs in the data. (Right) Distribution of number of animals per breed.* ](/home/rstudio/work/results/figures/summary_vis/top_dog_cat_breed_names_num_animals_per_breed_combined.png){width=800px}
 
 
 
 Though the names of the pets will not become a factor in our model, it is still interesting to explore. The **most common name for both cats and dogs was 'Unknown' or 'No Name Yet'**, but since these results are less interesting to show, we are showing only those with pets that have a given name. For dogs, we see the top names are Lucky, Brownie and Max. For cats, we see the top names are Kitty, Baby, Mimi. Also important to view are the range of ages of the pets listed. For both cats and dogs we see that the range of ages listed for the animals goes from very young (sub 1 year) to quite old, with a **maximum age around 21 years**. We can definitely see that the age is skewed lower, with **most animals in the data set being under 1 year old.** 
 
-![*Figure 5. (Left) Most common dog and cat names for animals with a name. 'Unknown' was the most common, but this was removed such that we show animals assigned names. (Right) The age distribution of the anmials in years.*](/home/rstudio/work/results/figures/single_animals_top_cat_dog_names_ages.png){width=700px}
+![*Figure 5. (Left) Most common dog and cat names for animals with a name. 'Unknown' was the most common, but this was removed such that we show animals assigned names. (Right) The age distribution of the anmials in years.*](/home/rstudio/work/results/figures/summary_vis/single_animals_top_cat_dog_names_ages.png){width=700px}
 
 
 Great! We have explore our data set and shown that is well balanced and has many interesting features. This will work great for us to move into building a model to predict the adoption rate. 
@@ -76,25 +76,20 @@ We will do this using the PyCaret package in Python which will enable us to buil
 1. It will prepare your data for modeling by One-Hot-Encoding cateogrical variables
 2. Compare across multiple models to identify the top models to develop and tune
 
-After comparing models, we can see that the Ridge Classifier has the highest Accuracy, Gradient Boosting Classifier has the highest Precision and F1 score, and the ExtraTrees Classifier ranks third in line, and finally the Random Forest Classifier has the highest Area Under the Curve (AUC).  These models, however, all have very low accuracy, ranging from 0.38 to 0.40.
+After comparing models, we can see that the Gradient Boosting Classifier has the highest Accuracy, Precision and F1 score, the Ada Boost Classifier ranks second in accuracy, and finally the Random Forest Classifier has the highest Area Under the Curve (AUC) and the third highest accuracy.  These models, however, all have very low accuracy, ranging from 0.38 to 0.40. Bummer...
 
-Before we continue, let's generate our Extra Trees Classifier model and look at the important features. 
-![*Figure 6. Top 10 important features in extra tree classifier model](/home/rstudio/work/results/figures/et_model_top_features_importance_nofeature_selection_plot.png'){width=700px}
+If we look at our total features we see we have 65. However, if we set a threshold and only keep features with an importance > 0.1, we see we hae 25 important features. Subsetting our training data to only contain these features and running the compare models function, we see our models improve even worse... odd. 
 
-If we look at our total features we see we have 65, however, if we set a threshold and only keep features with an importance > 0.1, we see we hae 25 important features. Subsetting our training data to only contain these features and running the compare models function, we see a slight improvement, where our top four classifiers are Gradient Boosting, Random Forest, Ada Boost, and Decision Tree, with accuracy values ranging from 0.52 to 0.55.
-
-Great! Let's use our updated set of features to tune our top four models and then predict on our unseen data. 
-
-When we move to create and tune our models, we see that the original model is better than our tuned model for the top three models. This indicates that our models are likely overfit, and perhaps we chose too few features. But let's visualize a few results of our top 3 models without tuning anyways.
+For now, we will move onto tuning out top three models with all fetures, and then use each tuned model to predict on unseen data. Let's visualize a few results of our top 3 models. We will look at the confusion matrix, the area under the curve, and the most important features. 
 
 Gradient Boosting Classifier Results
-![*Figure 7. Confusion Matrix](/home/rstudio/work/results/figures/gbc_confusion_matrix_notuneing.png'){width=500px}
+![*Figure 7. Confusion Matrix](/home/rstudio/work/results/figures/gbc_model/Confusion Matrix.png'){width=300px}
 
 Random Forest Classifier Results
-![*Figure 7. Confusion Matrix](/home/rstudio/work/results/figures/rf_confusion_matrix_notuneing.png'){width=500px}
+![*Figure 8. Confusion Matrix](/home/rstudio/work/results/figures/rf_model/Confusion Matrix.png'){width=300px}
 
 
-Decision Tree Classifier Results 
-![*Figure 7. Confusion Matrix](/home/rstudio/work/results/figures/ada_confusion_matrix_notuneing.png'){width=500px}
+Decision Ada Boost Classifier Results  
+![*Figure 9. Confusion Matrix](/home/rstudio/work/results/figures/ada_model/Confusion Matrix.png'){width=300px}
 
 

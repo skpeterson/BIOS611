@@ -19,7 +19,7 @@ RUN R -e "install.packages('remotes')"
 RUN R -e "remotes::install_github('davidsjoberg/ggsankey')"
 
 # Install Jupyter and other Python packages
-RUN pip3 install jupyter scikit-learn PyCaret pandas
+RUN pip3 install jupyter scikit-learn PyCaret pandas matplotlib
 
 # Set password for rstudio user 
 RUN echo "rstudio:benson" | chpasswd
