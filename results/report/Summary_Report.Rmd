@@ -76,4 +76,25 @@ We will do this using the PyCaret package in Python which will enable us to buil
 1. It will prepare your data for modeling by One-Hot-Encoding cateogrical variables
 2. Compare across multiple models to identify the top models to develop and tune
 
-After comparing models, we can see that the Ridge Classifier has the highest Accuracy, Gradient Boosting Classifier has the highest Precision and F1 score, and the ExtraTrees Classifier ranks third in line, and finally the Random Forest Classifier has the highest Area Under the Curve (AUC).  These are the four models we will train, tune, and use to predict Adoption Speed in our data. 
+After comparing models, we can see that the Ridge Classifier has the highest Accuracy, Gradient Boosting Classifier has the highest Precision and F1 score, and the ExtraTrees Classifier ranks third in line, and finally the Random Forest Classifier has the highest Area Under the Curve (AUC).  These models, however, all have very low accuracy, ranging from 0.38 to 0.40.
+
+Before we continue, let's generate our Extra Trees Classifier model and look at the important features. 
+![*Figure 6. Top 10 important features in extra tree classifier model](/home/rstudio/work/results/figures/et_model_top_features_importance_nofeature_selection_plot.png'){width=700px}
+
+If we look at our total features we see we have 65, however, if we set a threshold and only keep features with an importance > 0.1, we see we hae 25 important features. Subsetting our training data to only contain these features and running the compare models function, we see a slight improvement, where our top four classifiers are Gradient Boosting, Random Forest, Ada Boost, and Decision Tree, with accuracy values ranging from 0.52 to 0.55.
+
+Great! Let's use our updated set of features to tune our top four models and then predict on our unseen data. 
+
+When we move to create and tune our models, we see that the original model is better than our tuned model for the top three models. This indicates that our models are likely overfit, and perhaps we chose too few features. But let's visualize a few results of our top 3 models without tuning anyways.
+
+Gradient Boosting Classifier Results
+![*Figure 7. Confusion Matrix](/home/rstudio/work/results/figures/gbc_confusion_matrix_notuneing.png'){width=500px}
+
+Random Forest Classifier Results
+![*Figure 7. Confusion Matrix](/home/rstudio/work/results/figures/rf_confusion_matrix_notuneing.png'){width=500px}
+
+
+Decision Tree Classifier Results 
+![*Figure 7. Confusion Matrix](/home/rstudio/work/results/figures/ada_confusion_matrix_notuneing.png'){width=500px}
+
+
