@@ -1,6 +1,6 @@
 ## Predicting Dog and Cat Adoptability
 
-This project utilizes data from PetFinder.com, that was downloaded from kaggle. The goal is to predict the time it takes for dogs to get adopted based on the information pulled from PetFinder.com which contains characteristics like age, breed, color, vacination status etc. 
+This project utilizes data from PetFinder.com, that was downloaded from kaggle. The goal is to predict the time it takes for dogs to get adopted based on the information pulled from PetFinder.com which contains characteristics like age, breed, color, vacination status etc. This project makes use of R for data cleaning and visualization (dplyr, ggplot) and Python for building and testing machine learning models (PyCaret, Pandas). 
 
 To get started, clone this repository using the following command line argument
 ```
