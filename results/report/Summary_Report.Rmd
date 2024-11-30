@@ -1,5 +1,5 @@
 ---
-title: "Predicting Pet Adoption Rates"
+title: "Predicting Pet Adoption Rates using PyCaret Multiclass Classification"
 author: "Sara K Peterson"
 date: "`r Sys.Date()`"
 output: html_document
@@ -22,15 +22,20 @@ We have two goals on this project:
 
 ## Goal 1: Explore and visualize our dataset
 
+
+### Adoption Rates Overview 
+
 Given that our goal is to predict adaptability, let's look at the distribution of adoption rates within our data set, as well as the frequency of the number of pets that are in a given post. If more than one animal is in a given post, it makes it trickier to attribute features to the animal, unless we assume uniform across the set. 
 
 From the figure we can notice two important qualities of our data set from the start. First we see that we have a balance data set in terms of the adoption rate. Specifically, we note that very few animals are adopted the day the listing goes up (0). It looks like a cats are more commonly adopted between 1 - 7 days (1) and between 8 - 30 days (2) within the post being available, while dogs are more often adopted 31 - 90 days (3) and 91 + days (4) after post. A slightly smaller number of animals are  Second, we see that a vast majority if our listings are single animals. Both of these are great news! The first, because it means that we should be able to predict the adoption rate, since we have example cases for each of the values we want to predict. The second is helpful for visualization purposes, as we are able to know that the feature in the data is describing that animal specifically. 
 
-![*Figure 1. (Left) Distribution of adoption speeds of animals in the dataset separated by Cats vs Dogs where 0 = Adopted same day as posting, 1 = Adopted 1-7 days since posting, 2 = Adopted 8-30 days since posting, 3 = Adopted 31 - 90 days since posting, 4 = Adopted 91 + days since posting. (Right) The quantity of animals included in the posting.*]( /home/rstudio/work/results/figures/summary_vis/cat_dog_adopt_rate_quantity_per_post.png){ width=500px }
+![*Figure 1. (Left) Distribution of adoption speeds of animals in the dataset separated by Cats vs Dogs where 0 = Adopted same day as posting, 1 = Adopted 1-7 days since posting, 2 = Adopted 8-30 days since posting, 3 = Adopted 31 - 90 days since posting, 4 = Adopted 91 + days since posting. (Right) The quantity of animals included in the posting.*](/home/rstudio/work/results/figures/summary_vis/cat_dog_adopt_rate_quantity_per_post.png){ width=500px }
 
-
+### Single Animals Posts
 
 Now that we can see we have some posts with greater than 1 animal per post, let's separate out data into **two categories**, *posts with 1 animal*, and *posts with more than 1 animal*. We will create our visualizations with the listings that are for 1 animal only, as then we have a 1:1 mapping of features to animal. Otherwise, we are assuming that the features are true for all animals, which may or not be accurate. 
+
+#### Categorical Variables 
 
 To view a summary of our data, we will look at bar charts of our all of our features except for breed, adoption fee, and state, as these have too many categories and will be more helpful to view in a different way. 
 
@@ -49,17 +54,20 @@ From the visualization below, we can observe the following:
 ![*Figure 2. Overview of various features of the data set including, the gender of the animal, the size at maturity of the animal, the hair length, vaccination status, dewormed status, whether the animal has been spayed/neutered, the health status of the animal as it was put up for adoption, and the main fur color.*](/home/rstudio/work/results/figures/summary_vis/single_animals_overview_plots.png){ width=400px }
 
 
+#### Adoption Cost 
 
 There are a range of costs for the animals, going from **free to a max of 2000 dollars**. The distribution of the cats and dogs are similar, with a vast majority of animals being free to 10 dollars. We see a second bump in cost around 50 dollars, and then around 100 dollars. 
 
 ![*Figure 3. Overview of various features of the data set including, the gender of the animal, the size at maturity of the animal, the hair length, vaccination status, dewormed status, whether the animal has been spayed/neutered, the health status of the animal as it was put up for adoption, and the main fur color.* ](/home/rstudio/work/results/figures/summary_vis/adoption_fee_distribution.png){ width=300px }
 
+#### Breeds
 
 Next, let's look at the breeds of dogs and cats in our data set. In total, we have **63 distinct cat breeds**, and **109 distinct dog breeds**. For cats, aside from the generic domestic/american short, medium, and long hair, we see that the most common cat breed is a **Tabby**, followed by Siamese, and Persian, all within a similar range of occurrence. We see then see a decrease in the number of cats per breed for the breeds Calico, Bengal, and Tuxedo. For dog breeds, we see that the primary breed by far is **mixed breed**, with Shih Tzu, Labrador retrievers, poodles and terriers being the most common breeds. In the box plot on the right hand side of the figure we can see that the **median number of animals per breed is higher in cats than dogs**, with the median for cats being ~6 and for dogs ~4. Given that we have fewer cat breeds than dog breeds, and that we have more dogs than cats overall in our data set, this makes sense.  
 
 ![*Figure 4. (Left) Cat breeds in ranked order of most common to less common for breeds with at least 5 cats in the data. (Middle) Dog breeds in ranked order of most common to less common for breeds with at least 5 dogs in the data. (Right) Distribution of number of animals per breed.* ](/home/rstudio/work/results/figures/summary_vis/top_dog_cat_breed_names_num_animals_per_breed_combined.png){width=800px}
 
 
+#### Names and Ages
 
 Though the names of the pets will not become a factor in our model, it is still interesting to explore. The **most common name for both cats and dogs was 'Unknown' or 'No Name Yet'**, but since these results are less interesting to show, we are showing only those with pets that have a given name. For dogs, we see the top names are Lucky, Brownie and Max. For cats, we see the top names are Kitty, Baby, Mimi. Also important to view are the range of ages of the pets listed. For both cats and dogs we see that the range of ages listed for the animals goes from very young (sub 1 year) to quite old, with a **maximum age around 21 years**. We can definitely see that the age is skewed lower, with **most animals in the data set being under 1 year old.** 
 
@@ -71,6 +79,8 @@ Great! We have explore our data set and shown that is well balanced and has many
 
 ## Goal 2 : Predict the speed the animal will get adopted
 
+### Modeling Strategy Overview 
+
 We will do this using the PyCaret package in Python which will enable us to build multi-classifier models, as our Adoption Speed is 0, 1, 2, 3, 4. PyCaret has a few very helpful built in functions. 
 
 1. It will prepare your data for modeling by One-Hot-Encoding cateogrical variables
@@ -78,18 +88,41 @@ We will do this using the PyCaret package in Python which will enable us to buil
 
 After comparing models, we can see that the Gradient Boosting Classifier has the highest Accuracy, Precision and F1 score, the Ada Boost Classifier ranks second in accuracy, and finally the Random Forest Classifier has the highest Area Under the Curve (AUC) and the third highest accuracy.  These models, however, all have very low accuracy, ranging from 0.38 to 0.40. Bummer...
 
-If we look at our total features we see we have 65. However, if we set a threshold and only keep features with an importance > 0.1, we see we hae 25 important features. Subsetting our training data to only contain these features and running the compare models function, we see our models improve even worse... odd. 
+If we look at our total features we see we have 65. However, if we set a threshold and only keep features with an importance > 0.1, we see we have 25 important features. Subsetting our training data to only contain these features and running the compare models function, we see our models improve even worse... odd. 
 
-For now, we will move onto tuning out top three models with all fetures, and then use each tuned model to predict on unseen data. Let's visualize a few results of our top 3 models. We will look at the confusion matrix, the area under the curve, and the most important features. 
+For now, we will move onto tuning our top three models with all features, and then use each tuned model to predict on unseen data. Let's visualize a few results of our top 3 models. We will look at the confusion matrix to assess model accuracy and which of our features are the most important. 
 
-Gradient Boosting Classifier Results
-![*Figure 7. Confusion Matrix](/home/rstudio/work/results/figures/gbc_model/Confusion Matrix.png'){width=300px}
+### Model Tuning and Evaluation
 
-Random Forest Classifier Results
-![*Figure 8. Confusion Matrix](/home/rstudio/work/results/figures/rf_model/Confusion Matrix.png'){width=300px}
+#### Gradient Boosting Classifier Results
+
+The gradient boosting classifier (gbc) model has a 0.40 mean accuracy on 10 folds, with tuning providing less than 0.02 improvement in accuracy for the model. From our confusion matrix we determine that class 0 has the lowest accuracy prediction and class 4 has the highest. Looking back at our first visualization of this data, we see we have an unbalanced set of values for the adoption speeds, with very few animals (both cats and dogs) being adopted quickly. All other classes (1,2,3 and 4) are similar sizes, so this explains the models lack of ability to predict quickly adopted pets. The three most important features are age, breed, and the number of pictures. 
+
+![*Figure 7(a). Confusion Matrix*](/home/rstudio/work/results/figures/gbc_model/Confusion Matrix.png){width=300px}
+
+![*Figure 7(b). Feature Importance*](/home/rstudio/work/results/figures/gbc_model/Feature Importance.png){width=300px}
+
+Using the tuned gbc model to predict on unseen data, the accuracy is 0.46, the AUC is 0.73, the recall is 0.46, the precision is 0.49, the F1 score is 0.43. 
+
+#### Random Forest Classifier Results
+
+The random forest classifier 
+
+The random forest (rf) model has a mean accuracy of 0.39 over 10 folds before tuning, and 0.49 after tuning. Similar to the gbc model, the rf model very poorly identified quickly adopted dogs (class 0), and does much better with slower adopted dogs (class 4). The top three important features are age, breed, and photo amount. 
+
+![*Figure 8(a). Confusion Matrix*](/home/rstudio/work/results/figures/rf_model/Confusion Matrix.png){width=300px}
+![*Figure 8(b). Feature Importance*](/home/rstudio/work/results/figures/rf_model/Feature Importance.png){width=300px}
+Running the model on the unseen data, the rf classifier has an accuracy of 0.47, AUC of 0.74, recall of 0.47, precision of 0.47, and F1 score of 0.44.
 
 
-Decision Ada Boost Classifier Results  
-![*Figure 9. Confusion Matrix](/home/rstudio/work/results/figures/ada_model/Confusion Matrix.png'){width=300px}
+#### Decision Ada Boost Classifier Results
 
+The ada boost (ada) classifier has an average accuracy of 0.30 over 10 folds, with tuning resulting in a lower performing model. The evaluating the performance of the untuned model, we can see that the ada model is the only model that prediction any true positive in the 0 class. Like the gbc and rf models, the class with the higher true positive predictions is the slower adopted dogs (class 4). Interestingly, in the ada model, the number of pets per post is the most important feature, which is different that the other models. Followed by breed and age, as we saw before. Interestingly, the state the dog is in is the fourth most important feature, implying that there are certain regions of Malaysia with higher adoption rates. 
+
+![*Figure 9(a). Confusion Matrix*](/home/rstudio/work/results/figures/ada_model/Confusion Matrix.png){width=300px}
+![*Figure 9(b). Feature Importance*](/home/rstudio/work/results/figures/ada_model/Feature Importance.png){width=300px}
+Running the model on unseen data the ada classifier has the lowest accuracy of 0.37, AUC of 0.64, recall of 0.34, precision of 0.34, and an F1 score of 0.34. 
+
+
+# Concluding Thoughts 
 
