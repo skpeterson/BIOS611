@@ -22,3 +22,13 @@ Now open your web browser, and open two tabs. The docker container runs both Rst
 - To access Jupyter notebook go to http://<host_machine_ip>:8888/tree?token=<token> . Where <host machine IP> is the IP address of the machine running the Docker container, and the <token> can be found in the container log in the bash shell you started the container in.
 
 Great!! You're in!!
+
+You're welcome to go exploring around, run a few scripts manually, generate some visualizations, or if you would just like to generate the final report, go to the terminal in the interactive Rstudio server session you joined, go to the work directory
+```
+cd ./work
+``` 
+and build the report 
+
+```
+make results/report/Summary_Report.Rmd
+```
