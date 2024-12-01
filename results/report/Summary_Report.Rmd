@@ -18,7 +18,7 @@ We have two goals on this project:
 
 1. Explore and visualize the data set through various summary figures using R (specifically the tidyverse package, mainly ggplot2 and dplyr)
 
-2. Implement a model that allows us to accurately predict the adoption rate for a given animal in Python (specifically using the libraries ski-kit-learn and caret)
+2. Implement a model that allows us to accurately predict the adoption rate for a given animal in Python (specifically using the PyCaret library)
 
 ## Goal 1: Explore and visualize our dataset
 
@@ -81,51 +81,68 @@ Great! We have explore our data set and shown that is well balanced and has many
 
 ### Modeling Strategy Overview 
 
-We will do this using the PyCaret package in Python which will enable us to build multi-classifier models, as our Adoption Speed is 0, 1, 2, 3, 4. PyCaret has a few very helpful built in functions. 
+We will do this using the PyCaret package in Python which will enable us to build **multi-classifier classification models** to predict the adoption speed (0, 1, 2, 3, 4). PyCaret has a few very helpful built in functions that we will use. 
 
-1. It will prepare your data for modeling by One-Hot-Encoding cateogrical variables
-2. Compare across multiple models to identify the top models to develop and tune
+1.First, we will remove features that would lead to bias or don't make sense to keep in. In this case, we decide to remove the following: Name, the Description, the PetID and the RescuerID.  
 
-After comparing models, we can see that the Gradient Boosting Classifier has the highest Accuracy, Precision and F1 score, the Ada Boost Classifier ranks second in accuracy, and finally the Random Forest Classifier has the highest Area Under the Curve (AUC) and the third highest accuracy.  These models, however, all have very low accuracy, ranging from 0.38 to 0.40. Bummer...
 
-If we look at our total features we see we have 65. However, if we set a threshold and only keep features with an importance > 0.1, we see we have 25 important features. Subsetting our training data to only contain these features and running the compare models function, we see our models improve even worse... odd. 
+2. Next, we will prepare our data for machine learning by completing One-Hot-Encoding on categorical variables. This is important for categorical variables where values like 0, 1, 2 etc would appear to have hierarchy to the model, when in reality they don't (they just represent different, but equal values). 
 
-For now, we will move onto tuning our top three models with all features, and then use each tuned model to predict on unseen data. Let's visualize a few results of our top 3 models. We will look at the confusion matrix to assess model accuracy and which of our features are the most important. 
+3. Finally, we will compare across 18 classification models in the module to identify the top models to develop and tune. 
+
+### Initial Comparison of All Models
+
+After comparing between the 18 models available, we see that the Gradient Boosting Classifier has the highest Accuracy, Precision and F1 score, the Ada Boost Classifier ranks second in accuracy, and finally the Random Forest Classifier has the highest Area Under the Curve (AUC) and the third highest accuracy.  These models, however, all have very low accuracy, ranging from 0.38 to 0.40. Bummer...
+
+If we look at our total features we see we have 65. However, if we set a threshold and only keep features with an importance > 0.1, we see we have 25 important features. Subsetting our One Hot Encoded transformed data to only contain these features and running the compare models function, we see our models perform even worse.. very odd. 
+
+For now, we will move onto tuning our top three models with all features since identifying top features did not improve model accuracy, and then use each tuned model to predict on unseen data. Let's visualize a few results of our top 3 models. We will look at the confusion matrix to assess model accuracy and which of our features are the most important. 
 
 ### Model Tuning and Evaluation
 
 #### Gradient Boosting Classifier Results
 
-The gradient boosting classifier (gbc) model has a 0.40 mean accuracy on 10 folds, with tuning providing less than 0.02 improvement in accuracy for the model. From our confusion matrix we determine that class 0 has the lowest accuracy prediction and class 4 has the highest. Looking back at our first visualization of this data, we see we have an unbalanced set of values for the adoption speeds, with very few animals (both cats and dogs) being adopted quickly. All other classes (1,2,3 and 4) are similar sizes, so this explains the models lack of ability to predict quickly adopted pets. The three most important features are age, breed, and the number of pictures. 
+The gradient boosting classifier (gbc) model has a 0.40 mean accuracy on 10 folds, with tuning providing less than 0.02 improvement in accuracy for the model. From our confusion matrix we determine that class 0 has the lowest accuracy prediction and class 4 has the highest. Looking back at our first visualization of this data, we see we have an unbalanced set of values for the adoption speeds, with very few animals (both cats and dogs) being adopted quickly. All other classes (1,2,3 and 4) are similar sizes, so this explains the models lack of ability to predict quickly adopted pets. 
 
 ![*Figure 7(a). Confusion Matrix*](/home/rstudio/work/results/figures/gbc_model/Confusion_Matrix.png){width=300px}
 
+The three most important features are age, breed, and the number of pictures. This result for feature importance makes sense to me, as the breed and age of the animal determines the temperament and behavior, and this heavily influences whether the dog will fit into the lifestyle of the individual who is adopting.
+
 ![*Figure 7(b). Feature Importance*](/home/rstudio/work/results/figures/gbc_model/Feature_Importance.png){width=300px}
 
+Using the tuned gbc model to predict on unseen data, the accuracy is 0.46, the AUC is 0.73, the recall is 0.46, the precision is 0.49, the F1 score is 0.43. The gradient boosting classifier has the highest precision on unseen data of the three models. 
 
-Using the tuned gbc model to predict on unseen data, the accuracy is 0.46, the AUC is 0.73, the recall is 0.46, the precision is 0.49, the F1 score is 0.43. 
 
 #### Random Forest Classifier Results
 
 The random forest classifier 
 
-The random forest (rf) model has a mean accuracy of 0.39 over 10 folds before tuning, and 0.49 after tuning. Similar to the gbc model, the rf model very poorly identified quickly adopted dogs (class 0), and does much better with slower adopted dogs (class 4). The top three important features are age, breed, and photo amount. 
+The random forest (rf) model has a mean accuracy of 0.39 over 10 folds before tuning, and 0.40 after tuning. Similar to the gbc model, the rf model very poorly identified quickly adopted animals (class 0), and does much better with slower adopted animals (class 4). 
 
 ![*Figure 8(a). Confusion Matrix*](/home/rstudio/work/results/figures/rf_model/Confusion_Matrix.png){width=300px}
+
+As we saw before, the top three important features are age, breed, and the number of pictures. Again, these features make sense to have high importance, as age and breed of a dog/cat heavily determine temperament. Additionally, having photos allows people to become emotionally attached to the animal, and would make sense for animals with more pictures to be adopted quicker.  
 
 ![*Figure 8(b). Feature Importance*](/home/rstudio/work/results/figures/rf_model/Feature_Importance.png){width=300px}
 
 
-Running the model on the unseen data, the rf classifier has an accuracy of 0.47, AUC of 0.74, recall of 0.47, precision of 0.47, and F1 score of 0.44.
+Running the model on the unseen data, the rf classifier has an accuracy of 0.47, AUC of 0.74, recall of 0.47, precision of 0.47, and F1 score of 0.44.The random forest classifier model has the highest accuracy and precision of the three models on unseen data. 
 
 
 #### Decision Ada Boost Classifier Results
 
-The ada boost (ada) classifier has an average accuracy of 0.30 over 10 folds, with tuning resulting in a lower performing model. The evaluating the performance of the untuned model, we can see that the ada model is the only model that prediction any true positive in the 0 class. Like the gbc and rf models, the class with the higher true positive predictions is the slower adopted dogs (class 4). Interestingly, in the ada model, the number of pets per post is the most important feature, which is different that the other models. Followed by breed and age, as we saw before. Interestingly, the state the dog is in is the fourth most important feature, implying that there are certain regions of Malaysia with higher adoption rates. 
+The adaboost (ada) classifier has an average accuracy of 0.30 over 10 folds, with tuning resulting in a lower performing model. The evaluating the performance of the untuned model, we can see that the ada model is the only model that predicts any true positives in the 0 class. Like the gbc and rf models, the class with the higher true positive predictions is the slower adopted animals (class 4).  
 
 ![*Figure 9(a). Confusion Matrix*](/home/rstudio/work/results/figures/ada_model/Confusion_Matrix.png){width=300px}
+
+
+Interestingly, in the AdaBoost classifier, the number of pets per post is the most important feature, which is different from the other models. Followed by breed and age, as we saw before. Also, unique is that the state the cat/dog is in is the fourth most important feature, implying that there are certain regions of Malaysia with higher adoption rates. This could potentially be the difference between higher and lower density states (cities vs rural areas) where more people result in more adoptions. 
 
 ![*Figure 9(b). Feature Importance*](/home/rstudio/work/results/figures/ada_model/Feature_Importance.png){width=300px}
 
 
-Running the model on unseen data the ada classifier has the lowest accuracy of 0.37, AUC of 0.64, recall of 0.34, precision of 0.34, and an F1 score of 0.34. 
+Running the model on unseen data the AdaBoost classifier has the lowest accuracy of 0.37, AUC of 0.64, recall of 0.34, precision of 0.34, and an F1 score of 0.34.The ada boost classifier has the lowest accuracy and precision on unseen data of our three models. 
+
+# Concluding Thoughts
+
+In this report, we performed both exploratory visualization using ggplot and multi-class classification analysis with PyCaret to explore the factors influencing pet adoption speed on PetFinder.com. Our findings revealed that most animals are healthy and young (under 1 year), with age, breed, and the number of pictures in the posting being key determinants of adoption speed. On unseen data, the gradient boosting classifier achieved an accuracy of 0.46 and the highest precision among the models. The random forest model, with a mean accuracy of 0.39, faced similar challenges with class 0 predictions but outperformed GBC in accuracy and precision on unseen data (0.47). The AdaBoost classifier, despite its lower cross-validation performance, was most accurate in predicting class 0 adoption rates.
