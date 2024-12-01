@@ -10,13 +10,7 @@ RUN apt update && apt install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install the necessary packages for the analysis
-RUN R -e "install.packages(c('here','NatParksPalettes','cowplot','ggridges'))"
-
-# Install remotes to allow installation from GitHub
-RUN R -e "install.packages('remotes')"
-
-# Install ggsankey from GitHub
-RUN R -e "remotes::install_github('davidsjoberg/ggsankey')"
+RUN R -e "install.packages(c('here','NatParksPalettes','cowplot','ggridges','ggalluvial'))"
 
 # Install Jupyter and other Python packages
 RUN pip3 install jupyter scikit-learn PyCaret pandas matplotlib

@@ -3,12 +3,12 @@ suppressPackageStartupMessages({
   library(dplyr)
 })
 
-data <- read.csv('work/data/source_data/petfinder_train_dataset.csv',sep=',')
-breed_labels <- read.csv('work/data/source_data/breed_labels.csv')
-color_labels <- read.csv('work/data/source_data/color_labels.csv')
+data <- read.csv('/home/rstudio/work/data/source_data/petfinder_train_dataset.csv',sep=',')
+breed_labels <- read.csv('/home/rstudio/work/data/source_data/breed_labels.csv')
+color_labels <- read.csv('/home/rstudio/work/data/source_data/color_labels.csv')
 no_color <- data.frame(ColorID = 0, ColorName = NA)
 color_labels <- rbind(color_labels, no_color)
-state_labels <- read.csv('work/data/source_data/state_labels.csv')
+state_labels <- read.csv('/home/rstudio/work/data/source_data/state_labels.csv')
 
 
 # Convert columns to appropriate data types and give factors meaning 
@@ -74,4 +74,4 @@ data_viz$Name[data_viz$Name %in% c('No Name', 'Kittens','Puppy')] <- 'Unknown'
 data_viz %>% group_by(Type, Quantity) %>% count() %>% print(n=30)
 
 # let's write this data out so we can use it for visualization 
-write.csv(data_viz, file = 'work/data/working_data/train_adoption_values_to_category_data.csv', row.names = F)
+write.csv(data_viz, file = '/home/rstudio/work/data/working_data/train_adoption_values_to_category_data.csv', row.names = F)

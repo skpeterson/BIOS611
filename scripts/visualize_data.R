@@ -7,7 +7,7 @@ suppressPackageStartupMessages({
   library(ggalluvial)
 })
 
-data_all <- read.csv('work/data/working_data/train_adoption_values_to_category_data.csv', sep = ',')
+data_all <- read.csv('/home/rstudio/work/data/working_data/train_adoption_values_to_category_data.csv', sep = ',')
 
 adopt_speed <- ggplot(data = data_all %>% group_by(Type,AdoptionSpeed) %>% count(),
        aes(axis1 = Type, axis2 = AdoptionSpeed, y = n)) +
@@ -34,7 +34,7 @@ pets_per_post <- ggplot(data_all, aes(x = Quantity, fill = Type)) +
     legend.position = "top")
 
 rate_num_plts <- plot_grid(adopt_speed, pets_per_post, ncol = 2)
-ggsave('work/results/figures/cat_dog_adopt_rate_quantity_per_post.png',rate_num_plts, units = 'in', width = 4.5, height = 3.5)
+ggsave('/home/rstudio/work/results/figures/summary_vis/cat_dog_adopt_rate_quantity_per_post.png',rate_num_plts, units = 'in', width = 4.5, height = 3.5)
 
 ## keep only entries where there is a single pet found
 # for entries with multiple pets we don't know what the info is referring to
@@ -73,7 +73,7 @@ plots <- lapply(feature_columns, function(feature) {
 # Create the grid with all plots
 basic_overview_plts <- plot_grid(plotlist = plots, nrow = 4)
 
-ggsave("work/results/figures/single_animals_overview_plots.png", basic_overview_plts, units = 'in', width = 5, height = 6.5)
+ggsave("/home/rstudio/work/results/figures/summary_vis/single_animals_overview_plots.png", basic_overview_plts, units = 'in', width = 5, height = 6.5)
 
 ## types of breeds 
 
@@ -113,7 +113,7 @@ breed_summary_plt <- ggplot(breed_summary, aes(x=Type, y=log(n), fill=Type)) +
 
 breed_summary_plts <- plot_grid(cat_breeds_barplt, dog_breeds_barplt, breed_summary_plt, ncol = 3, rel_widths = c(1.5,2,1.75))
 
-ggsave('work/results/figures/top_dog_cat_breed_names_num_animals_per_breed_combined.png', breed_summary_plts, units = 'in', width = 10, height = 5)
+ggsave('/home/rstudio/work/results/figures/summary_vis/top_dog_cat_breed_names_num_animals_per_breed_combined.png', breed_summary_plts, units = 'in', width = 10, height = 5)
 
 
 ## look at cost of animals 
@@ -135,7 +135,7 @@ adoption_fee <- ggplot(data_all, aes(x = log2(Fee + 1), y = Type, fill = Type)) 
     plot.margin = unit(c(0.1, 0.1, 0.1, 0.1), "cm")
   )
 
-ggsave('work/results/figures/adoption_fee_distribution.png', adoption_fee, units = 'in', width = 2, height = 1.5)
+ggsave('/home/rstudio/work/results/figures/summary_vis/adoption_fee_distribution.png', adoption_fee, units = 'in', width = 2, height = 1.5)
 
 
 
@@ -175,6 +175,6 @@ cat_names_plt <- ggplot(cat_name[2:30,]) +
 
 dog_cat_names <- plot_grid(dog_names_plt, cat_names_plt, nrow = 2)
 dog_cat_names_ages <- plot_grid(dog_cat_names, age_dist, ncol = 2, rel_widths = c(2,1))
-ggsave("work/results/figures/single_animals_top_cat_dog_names_ages.png", dog_cat_names_ages)
+ggsave("/home/rstudio/work/results/figures/summary_vis/single_animals_top_cat_dog_names_ages.png", dog_cat_names_ages)
 
 

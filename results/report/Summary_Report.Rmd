@@ -98,9 +98,10 @@ For now, we will move onto tuning our top three models with all features, and th
 
 The gradient boosting classifier (gbc) model has a 0.40 mean accuracy on 10 folds, with tuning providing less than 0.02 improvement in accuracy for the model. From our confusion matrix we determine that class 0 has the lowest accuracy prediction and class 4 has the highest. Looking back at our first visualization of this data, we see we have an unbalanced set of values for the adoption speeds, with very few animals (both cats and dogs) being adopted quickly. All other classes (1,2,3 and 4) are similar sizes, so this explains the models lack of ability to predict quickly adopted pets. The three most important features are age, breed, and the number of pictures. 
 
-![*Figure 7(a). Confusion Matrix*](/home/rstudio/work/results/figures/gbc_model/Confusion Matrix.png){width=300px}
+![*Figure 7(a). Confusion Matrix*](/home/rstudio/work/results/figures/gbc_model/Confusion_Matrix.png){width=300px}
 
-![*Figure 7(b). Feature Importance*](/home/rstudio/work/results/figures/gbc_model/Feature Importance.png){width=300px}
+![*Figure 7(b). Feature Importance*](/home/rstudio/work/results/figures/gbc_model/Feature_Importance.png){width=300px}
+
 
 Using the tuned gbc model to predict on unseen data, the accuracy is 0.46, the AUC is 0.73, the recall is 0.46, the precision is 0.49, the F1 score is 0.43. 
 
@@ -110,8 +111,11 @@ The random forest classifier
 
 The random forest (rf) model has a mean accuracy of 0.39 over 10 folds before tuning, and 0.49 after tuning. Similar to the gbc model, the rf model very poorly identified quickly adopted dogs (class 0), and does much better with slower adopted dogs (class 4). The top three important features are age, breed, and photo amount. 
 
-![*Figure 8(a). Confusion Matrix*](/home/rstudio/work/results/figures/rf_model/Confusion Matrix.png){width=300px}
-![*Figure 8(b). Feature Importance*](/home/rstudio/work/results/figures/rf_model/Feature Importance.png){width=300px}
+![*Figure 8(a). Confusion Matrix*](/home/rstudio/work/results/figures/rf_model/Confusion_Matrix.png){width=300px}
+
+![*Figure 8(b). Feature Importance*](/home/rstudio/work/results/figures/rf_model/Feature_Importance.png){width=300px}
+
+
 Running the model on the unseen data, the rf classifier has an accuracy of 0.47, AUC of 0.74, recall of 0.47, precision of 0.47, and F1 score of 0.44.
 
 
@@ -119,10 +123,9 @@ Running the model on the unseen data, the rf classifier has an accuracy of 0.47,
 
 The ada boost (ada) classifier has an average accuracy of 0.30 over 10 folds, with tuning resulting in a lower performing model. The evaluating the performance of the untuned model, we can see that the ada model is the only model that prediction any true positive in the 0 class. Like the gbc and rf models, the class with the higher true positive predictions is the slower adopted dogs (class 4). Interestingly, in the ada model, the number of pets per post is the most important feature, which is different that the other models. Followed by breed and age, as we saw before. Interestingly, the state the dog is in is the fourth most important feature, implying that there are certain regions of Malaysia with higher adoption rates. 
 
-![*Figure 9(a). Confusion Matrix*](/home/rstudio/work/results/figures/ada_model/Confusion Matrix.png){width=300px}
-![*Figure 9(b). Feature Importance*](/home/rstudio/work/results/figures/ada_model/Feature Importance.png){width=300px}
+![*Figure 9(a). Confusion Matrix*](/home/rstudio/work/results/figures/ada_model/Confusion_Matrix.png){width=300px}
+
+![*Figure 9(b). Feature Importance*](/home/rstudio/work/results/figures/ada_model/Feature_Importance.png){width=300px}
+
+
 Running the model on unseen data the ada classifier has the lowest accuracy of 0.37, AUC of 0.64, recall of 0.34, precision of 0.34, and an F1 score of 0.34. 
-
-
-# Concluding Thoughts 
-
