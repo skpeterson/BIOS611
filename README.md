@@ -4,7 +4,7 @@ This project utilizes data from PetFinder.com, that was downloaded from kaggle. 
 
 To get started, clone this repository using the following command line argument in a bash shell
 ```
-git clone https://github.com/skpeterson/BIOS611_Pet_Adoption_Data_Project.git
+git clone https://github.com/skpeterson/Predicting_Pet_Adoptability.git 
 ```
 
 To build the docker container, run the following in the directory you cloned the repo
