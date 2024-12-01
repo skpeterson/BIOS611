@@ -23,11 +23,7 @@ The docker container runs both Rstudio and Python/Jupyter notebook.
 
 Great!! You're in!!
 
-You're welcome to go exploring around, run a few scripts manually, generate some visualizations, or if you would just like to generate the final report, go to the terminal in the interactive Rstudio server session you joined, go to the work directory
-```
-cd ./work
-``` 
-clean the directories so we can ensure we are generating new figures 
+You're welcome to go exploring around, run a few scripts manually, generate some visualizations, or if you would just like to generate the final report, go to the terminal in the interactive Rstudio server session you joined and clean the directories so we can ensure we are generating new figures 
 ```
 make clean
 ```
@@ -37,5 +33,5 @@ make init
 ```
 and finally, build the report!
 ```
-make
+make /home/rstudio/work/results/report/Summary_Report.html
 ```
